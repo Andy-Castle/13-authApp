@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { User, AuthStatus, LoginResponse } from '../interfaces/index';
 
@@ -33,9 +33,17 @@ export class AuthService {
         localStorage.setItem('token', token);
         console.log({ user, token });
       }),
-      map(() => true)
+      map(() => true),
 
       //Todo: errores
+      // catchError((err) => {
+      //   return of(false);
+      // })
+      catchError((err) => {
+        // console.log(err);
+
+        return throwError(() => err.error.message);
+      })
     );
 
     return of(true);
