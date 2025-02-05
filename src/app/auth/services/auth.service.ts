@@ -50,8 +50,6 @@ export class AuthService {
         return throwError(() => err.error.message);
       })
     );
-
-    return of(true);
   }
 
   checkAuthStatus(): Observable<boolean> {
